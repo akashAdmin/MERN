@@ -259,62 +259,86 @@
 
 
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { useEffect, useState } from "react";
-import "./App.css"
-function App(){
-    const [users,setUsers] = useState([]);
-    useEffect(()=>{
-        fetch('https://jsonplaceholder.typicode.com/users')
-              .then((response) => response.json() )
-                .then((json) => setUsers(json))
-console.log(users)
-    },[users])
-    const onchangeHandler=(id,key,value)=>{
+  import "bootstrap/dist/css/bootstrap.min.css";
+  import "bootstrap/dist/js/bootstrap.bundle.min.js";
+  import { useEffect, useState } from "react";
+  import "./App.css"
 
-       setUsers((users)=>{
-      return users.map((user)=>{
-       return user.id === id? {...user,[key]:value} :user
-      })
-       })
+  function App(){
+      const [users,setUsers] = useState([]);
+      const [names,setNewname] = useState("");
+      const [emails,setNewEmail] =useState("");
+      console.log(users)
+      const name = names.trim();
+      const email = emails.trim();
+      useEffect(()=>{
+          fetch('https://jsonplaceholder.typicode.com/users')
+                .then((response) => response.json() ) 
+                  .then((json) => setUsers(json))
 
-    }
-return(
-    <div className="App">
-             <table className='bp4-html-table modifier'>
-                 <thead>
-                     <th>ID</th>
-                   <th>Name</th>
-                   <th>Email</th>
-                   <th>Website</th>
-                     <th>Action</th>
-              </thead>
-              <tbody>
-                { users.map(user=>
-                 <tr key={user.id}>
-                    <td>{user.id}</td>
-                    <td contentEditable onChange={value => onchangeHandler(user.id, 'name', value)}>{user.name}</td>
-                    <td contentEditable onChange={value => onchangeHandler(user.id, 'email', value)}>{user.email}</td>
-                    <td>{user.website}</td>
-                    <button>update</button>
-                    <button>delete</button>
-                 </tr>
-                )}
-        </tbody>
-              <br></br>
-              <tfoot>
-                <tr>
-                    <input type="text" placeholder="enterid"></input>
-                    <input type="text" placeholder="enter user name"></input>
-                    <input type="text" placeholder="enter the email"></input>
-                    <button>addUser</button>
-                   
-                </tr>
-              
-              </tfoot>
-    </table>
-    </div>
-)
-}
-export default App;
+      },[]);
+      const onchangeHandler=(id,key,value)=>{
+
+        setUsers((users)=>{
+        return users.map((user)=>{
+        return user.id === id? {...user,[key]:value} :user
+        })
+        })
+
+      }
+      function addUser(){
+        if(name&&email)
+        fetch('https://jsonplaceholder.typicode.com/users',{
+          method:"POST",
+          body:JSON.stringify({name,email}),headers: {
+                                    "Content-Type": "application/json; charset=UTF-8 "
+                            }
+        }).then((response)=>{
+          response.json()
+        }).then((data)=>{
+    setUsers([...users,data])
+        })
+        alert("data added")
+      }
+  return(
+      <div className="App">
+              <table className='bp4-html-table modifier'>
+                  <thead>
+                      <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Website</th>
+
+                      <th>Action</th>
+                </thead>
+                <tbody>
+                
+
+                    {users.map(user => 
+                      <tr key={user.id}>
+                          <td>{user.id}</td>
+                          <td>{user.name}</td>
+                          <td>{user.email}</td>
+                          <td>{user.website}</td>
+                          <td><contentEditablet onChange={value => onchangeHandler(user.id, 'email',value)} value={user.email} /></td>
+                          <td><contentEditable onChange={value => onchangeHandler(user.id, 'website',value)} value={user.website}/></td>
+                        
+                      </tr>
+                  )}
+          </tbody>
+                <br></br>
+                <tfoot>
+                  <tr>
+                      <input type="text" placeholder="enterid" onChange={(e)=>setNewEmail(e.target.value)}></input>
+                      <input type="text" placeholder="enter user name" onChange={(e)=>{setNewname(e.target.value)}}></input>
+                      <input type="text" placeholder="enter the email"></input>
+                      <button onClick={addUser}>addUser</button>
+                    
+                  </tr>
+                
+                </tfoot>
+      </table>
+      </div>
+  )
+  }
+  export default App;
