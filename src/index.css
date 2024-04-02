@@ -1,9 +1,30 @@
-@import "~normalize.css";
+/* @import "~normalize.css";
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
 
-/* bootstrap  */
+/* bootstrap  
 body {
   display: flex;
   justify-content: center;
+} 
+
+
+/* index.css */
+
+/* Import Bootstrap CSS */
+/* @import url("https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"); */
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* Your custom CSS rules */
+body {
+  font-family: "Arial", sans-serif;
+  /* Add your custom styles here */
 }
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Add more custom styles as needed */
